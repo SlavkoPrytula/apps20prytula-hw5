@@ -2,48 +2,24 @@ package ua.edu.ucu;
 
 import ua.edu.ucu.stream.*;
 
-import java.util.Arrays;
 
 public class StreamApp {
 
-    public static int[] streamOperations(IntStream intStream) {
-        //IntStream intStream = AsIntStream.of(-1, 0, 1, 2, 3); // input values
-
-        int[] res = intStream
-                .filter(x -> x > 0)
-                .map(x -> x * x)
-                .flatMap(x -> AsIntStream.of(x - 1, x, x + 1))
-                .toArray();
-//        int res = intStream
-//                .filter(x -> x > 0) // 1, 2, 3
-//                .map(x -> x * x) // 1, 4, 9
-//                .flatMap(x -> AsIntStream.of(x - 1, x, x + 1)) // 0, 1, 2, 3, 4, 5, 8, 9, 10
-//                .reduce(0, (sum, x) -> sum += x); // 42
-        return res;
+    public static int streamOperations(IntStream intStream) {
+        return intStream
+                .filter(x -> x > 0) // 1, 2, 3
+                .map(x -> x * x) // 1, 4, 9
+                .flatMap(x -> AsIntStream.of(x - 1, x, x + 1)) // 0, 1, 2, 3, 4, 5, 8, 9, 10
+                .reduce(0, (sum, x) -> sum += x);
     }
 
-    public static int[] streamToArray(IntStream intStream) {        
-        int[] intArr = intStream.toArray();
-        return intArr;
+    public static int[] streamToArray(IntStream intStream) {
+        return intStream.toArray();
     }
 
     public static String streamForEach(IntStream intStream) {        
         StringBuilder str = new StringBuilder();
-        intStream.forEach(x -> str.append(x));
+        intStream.forEach(str::append);
         return str.toString();
-    }
-
-    public static void main(String[] args) {
-        IntStream intStream = AsIntStream.of(-1, 0, 1, 2, 3);
-        System.out.println((Arrays.toString(streamToArray(intStream))));
-        System.out.println(Arrays.toString(streamOperations(intStream)));
-
-//        IntStream intStream1 = intStream;
-//
-//        System.out.println((Arrays.toString(streamToArray(intStream1))));
-//        System.out.println(Arrays.toString(streamOperations(intStream1)));
-//
-//        System.out.println((Arrays.toString(streamToArray(intStream))));
-//        System.out.println(Arrays.toString(streamOperations(intStream)));
     }
 }

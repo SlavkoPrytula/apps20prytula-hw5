@@ -1,23 +1,20 @@
 package ua.edu.ucu.stream;
 
-import ua.edu.ucu.function.*;
-import ua.edu.ucu.itterator.Iterator;
+import ua.edu.ucu.function.IntBinaryOperator;
+import ua.edu.ucu.function.IntToIntStreamFunction;
+import ua.edu.ucu.function.IntConsumer;
+import ua.edu.ucu.function.IntUnaryOperator;
+import ua.edu.ucu.function.IntPredicate;
 
 import java.util.LinkedList;
 import java.util.Objects;
 
 public class AsIntStream implements IntStream {
-    static LinkedList<Integer> intStream;
-    private static Iterator<Integer> iterator;
-
-    public AsIntStream() {
-        // To Do
-    }
+    private final LinkedList<Integer> intStream;
 
     public AsIntStream(LinkedList<Integer> stream) {
-        // To Do
-        intStream = new LinkedList<>();
-        intStream.addAll(stream);
+        this.intStream = new LinkedList<>();
+        this.intStream.addAll(stream);
     }
 
     public static IntStream of(int... values) {
@@ -25,22 +22,17 @@ public class AsIntStream implements IntStream {
         for (Integer integer : values) {
             stream.add(integer);
         }
-//        Iterable<Integer> iterable = intStream;
-//        iterator = (Iterator<Integer>) iterable.iterator();
-
-        return new AsIntStream(stream); // ??
+        return new AsIntStream(stream);
     }
 
     @Override
     public Double average() {
-        // terminal method
         checkEmpty();
         return (double) (sum() / intStream.size());
     }
 
     @Override
     public Integer max() {
-        // terminal method
         checkEmpty();
         int max = intStream.get(0);
         for (Integer integer : intStream) {
@@ -53,7 +45,6 @@ public class AsIntStream implements IntStream {
 
     @Override
     public Integer min() {
-        // terminal method
         checkEmpty();
         int min = intStream.get(0);
         for (Integer integer : intStream) {
@@ -66,13 +57,12 @@ public class AsIntStream implements IntStream {
 
     @Override
     public long count() {
-        // terminal method
+        checkEmpty();
         return intStream.size();
     }
 
     @Override
     public Integer sum() {
-        // terminal method
         checkEmpty();
         int sum = 0;
         for (Integer integer : intStream) {
@@ -84,9 +74,6 @@ public class AsIntStream implements IntStream {
     @Override
     public IntStream filter(IntPredicate predicate) {
         Objects.requireNonNull(predicate);
-//        Iterable<Integer> iterable = intStream;
-//        Iterator<Integer> iterator = (Iterator<Integer>) iterable.iterator();
-
         LinkedList<Integer> temp = new LinkedList<>();
 
         for (Integer i : intStream) {
@@ -94,19 +81,15 @@ public class AsIntStream implements IntStream {
                 temp.add(i);
             }
         }
-//        intStream = temp;
-//        while (iterator.hasNext()) {
-//            Integer integer = iterator.next();
-//            if (predicate.test(integer)) {
-//                temp.add(integer);
-//            }
-//        }
         return new AsIntStream(temp);
     }
 
     @Override
     public void forEach(IntConsumer action) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Objects.requireNonNull(action);
+        for (Integer i : intStream) {
+            action.accept(i);
+        }
     }
 
     @Override
@@ -124,23 +107,30 @@ public class AsIntStream implements IntStream {
     @Override
     public IntStream flatMap(IntToIntStreamFunction func) {
         Objects.requireNonNull(func);
-        LinkedList<IntStream> temp = new LinkedList<>();
+        LinkedList<Integer> temp = new LinkedList<>();
 
         for (Integer i : intStream) {
-            IntStream integer = func.applyAsIntStream(i);
-            temp.add(integer);
+            int[] items = func.applyAsIntStream(i).toArray();
+            for (Object j : items) {
+                temp.add((Integer) j);
+            }
         }
-        return new AsIntStream();
+        return new AsIntStream(temp);
     }
 
     @Override
     public int reduce(int identity, IntBinaryOperator op) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Objects.requireNonNull(op);
+        int result = identity;
+
+        for (Integer i : intStream) {
+            result = op.apply(result, i);
+        }
+        return result;
     }
 
     @Override
     public int[] toArray() {
-        // terminal method
         int[] array = new int[intStream.size()];
         for (int i = 0; i < intStream.size(); i++) {
             array[i] = intStream.get(i);
@@ -153,5 +143,4 @@ public class AsIntStream implements IntStream {
             throw new IllegalArgumentException();
         }
     }
-
 }
