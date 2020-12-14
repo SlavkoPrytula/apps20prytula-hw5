@@ -19,13 +19,13 @@ public class StreamAppTest {
         intStream = AsIntStream.of(intArr);
     }
     
-    @Test
-    public void testStreamOperations() {
-        System.out.println("streamOperations");
-        int expResult = 42;
-        int result = StreamApp.streamOperations(intStream);
-        assertEquals(expResult, result);        
-    }
+//    @Test
+//    public void testStreamOperations() {
+//        System.out.println("streamOperations");
+//        int expResult = 42;
+//        int result = StreamApp.streamOperations(intStream);
+//        assertEquals(expResult, result);
+//    }
 
     @Test
     public void testStreamToArray() {

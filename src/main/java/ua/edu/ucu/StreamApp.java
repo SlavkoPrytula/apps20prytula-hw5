@@ -2,15 +2,23 @@ package ua.edu.ucu;
 
 import ua.edu.ucu.stream.*;
 
+import java.util.Arrays;
+
 public class StreamApp {
 
-    public static int streamOperations(IntStream intStream) {
+    public static int[] streamOperations(IntStream intStream) {
         //IntStream intStream = AsIntStream.of(-1, 0, 1, 2, 3); // input values
-        int res = intStream
-                .filter(x -> x > 0) // 1, 2, 3
-                .map(x -> x * x) // 1, 4, 9
-                .flatMap(x -> AsIntStream.of(x - 1, x, x + 1)) // 0, 1, 2, 3, 4, 5, 8, 9, 10
-                .reduce(0, (sum, x) -> sum += x); // 42
+
+        int[] res = intStream
+                .filter(x -> x > 0)
+                .map(x -> x * x)
+                .flatMap(x -> AsIntStream.of(x - 1, x, x + 1))
+                .toArray();
+//        int res = intStream
+//                .filter(x -> x > 0) // 1, 2, 3
+//                .map(x -> x * x) // 1, 4, 9
+//                .flatMap(x -> AsIntStream.of(x - 1, x, x + 1)) // 0, 1, 2, 3, 4, 5, 8, 9, 10
+//                .reduce(0, (sum, x) -> sum += x); // 42
         return res;
     }
 
@@ -23,5 +31,19 @@ public class StreamApp {
         StringBuilder str = new StringBuilder();
         intStream.forEach(x -> str.append(x));
         return str.toString();
+    }
+
+    public static void main(String[] args) {
+        IntStream intStream = AsIntStream.of(-1, 0, 1, 2, 3);
+        System.out.println((Arrays.toString(streamToArray(intStream))));
+        System.out.println(Arrays.toString(streamOperations(intStream)));
+
+//        IntStream intStream1 = intStream;
+//
+//        System.out.println((Arrays.toString(streamToArray(intStream1))));
+//        System.out.println(Arrays.toString(streamOperations(intStream1)));
+//
+//        System.out.println((Arrays.toString(streamToArray(intStream))));
+//        System.out.println(Arrays.toString(streamOperations(intStream)));
     }
 }
