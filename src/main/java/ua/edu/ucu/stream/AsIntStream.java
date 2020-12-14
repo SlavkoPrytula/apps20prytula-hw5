@@ -77,7 +77,7 @@ public class AsIntStream implements IntStream {
         LinkedList<Integer> temp = new LinkedList<>();
 
         for (Integer i : intStream) {
-            if (predicate.test(i)){
+            if (predicate.test(i)) {
                 temp.add(i);
             }
         }
